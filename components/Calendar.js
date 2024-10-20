@@ -40,6 +40,9 @@ export default function Calendar(props) {
     Object.keys(months)[currMonth]
   );
   const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+  //const [selectJournal, setSelectJournal] = useState(" ");
+  const [click, setClick] = useState(false);
+  const [dayIdx, setDayIdx] = useState(null);
 
   const numericMonth = monthsArr.indexOf(selectedMonth);
   const data = completeData?.[selectedYear]?.[numericMonth] || {};
@@ -60,6 +63,11 @@ export default function Calendar(props) {
     } else {
       setSelectedMonth(monthsArr[numericMonth + val]);
     }
+  }
+
+  function handleClick(dayIndex) {
+    setClick(true);
+    setDayIdx(dayIndex);
   }
 
   const monthNow = new Date(
@@ -128,7 +136,7 @@ export default function Calendar(props) {
               let color = demo
                 ? gradients.indigo[baseRating[dayIndex]]
                 : dayIndex in data
-                ? gradients.indigo[data[dayIndex]]
+                ? gradients.indigo[data[dayIndex].mood]
                 : "white";
 
               return (
@@ -137,9 +145,11 @@ export default function Calendar(props) {
                   className={
                     "text-xs sm:text-sm border border-solid p-2 flex items-center gap-2 justify-between rounded-lg " +
                     (isToday ? " border-indigo-400" : " border-indigo-100") +
-                    (color === "white" ? " text-indigo-400" : " text-white")
+                    (color === "white" ? " text-indigo-400" : " text-white") +
+                    " hover:cursor-pointer hover:opacity-60 "
                   }
                   key={dayOfWeekIndex}
+                  onClick={() => handleClick(dayIndex)}
                 >
                   <p>{dayIndex}</p>
                 </div>
@@ -148,6 +158,26 @@ export default function Calendar(props) {
           </div>
         ))}
       </div>
+      <div>
+        {click && data[dayIdx] && (
+          <div
+            className={
+              "flex justify-center items-center bg-stone-200 rounded-lg p-6 md:p-8 lg:p-10 w-full "
+            }
+          >
+            <p
+              className={
+                "text-black-opacity-70 text-sm md:text-base lg:text-lg leading-relaxed " +
+                fugaz.className
+              }
+            >
+              {" "}
+              {data[dayIdx].journal}
+            </p>
+          </div>
+        )}
+      </div>
+      {/* <div>{click && data[dayIdx] && <div>{click}, this is journal</div>}</div> */}
     </div>
   );
 }

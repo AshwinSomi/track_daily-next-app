@@ -7,6 +7,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import Loading from "./Loading";
 import Login from "./Login";
+import Button from "./Button";
 
 const fugaz = Fugaz_One({ subsets: ["latin"], weight: ["400"] });
 
@@ -14,6 +15,9 @@ export default function Dashboard() {
   const { currentUser, userDataObject, setUserDataObject, loading } = useAuth();
   const [data, setData] = useState({});
   const now = new Date();
+  const [diary, setDiary] = useState("");
+  const [submittedDiary, setSubmittedDiary] = useState("");
+  const [mood, setMood] = useState(null);
 
   function countValues() {
     let total_number_of_days = 0;
@@ -47,8 +51,16 @@ export default function Dashboard() {
       if (!newData?.[year]?.[month]) {
         newData[year][month] = {};
       }
+      if (!newData?.[year]?.[month]?.[day]) {
+        newData[year][month][day] = {};
+      }
 
-      newData[year][month][day] = mood;
+      newData[year][month][day].mood = mood;
+      //add new notes to existing notes, need to fetch the data from firebase
+      // if (newData[year][month][day].journal) {
+      //   newData[year][month][day].journal += ".\n " + submittedDiary;
+      // }
+      //newData[year][month][day].journal = submittedDiary;
       //update the current state
       setData(newData);
       //update the global state
@@ -60,7 +72,59 @@ export default function Dashboard() {
         {
           [year]: {
             [month]: {
-              [day]: mood,
+              [day]: {
+                mood: mood,
+                //journal: submittedDiary,
+              },
+            },
+          },
+        },
+        { merge: true }
+      );
+      //res();
+    } catch (err) {
+      console.log("failed to set data", err.message);
+    }
+  }
+
+  async function handleSetJournal(submittedDiary) {
+    //const now = new Date();
+    const day = now.getDate();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+
+    try {
+      const newData = { ...userDataObject };
+      if (!newData?.[year]) {
+        newData[year] = {};
+      }
+      if (!newData?.[year]?.[month]) {
+        newData[year][month] = {};
+      }
+      if (!newData?.[year]?.[month]?.[day]) {
+        newData[year][month][day] = {};
+      }
+
+      //add new notes to existing notes, need to fetch the data from firebase
+      // if (newData[year][month][day].journal) {
+      //   newData[year][month][day].journal += ".\n " + submittedDiary;
+      // }
+      newData[year][month][day].journal = submittedDiary;
+      //update the current state
+      setData(newData);
+      //update the global state
+      setUserDataObject(newData);
+      //update firebase
+      const docRef = doc(db, "users", currentUser.uid);
+      const res = await setDoc(
+        docRef,
+        {
+          [year]: {
+            [month]: {
+              [day]: {
+                //mood: mood,
+                journal: submittedDiary,
+              },
             },
           },
         },
@@ -130,6 +194,7 @@ export default function Dashboard() {
           <button
             onClick={() => {
               const currentMoodValue = moodIndex + 1;
+              setMood(currentMoodValue);
               handleSetMood(currentMoodValue);
             }}
             className={
@@ -148,6 +213,43 @@ export default function Dashboard() {
             </p>
           </button>
         ))}
+        <div className="flex flex-col items-center justify-between ">
+          <p
+            className={
+              "p-6 text-2xl sm:text-3xl md:text-4xl text-center " +
+              fugaz.className
+            }
+          >
+            Want to say something...
+          </p>
+          <div>
+            <textarea
+              value={diary}
+              placeholder="type here"
+              onChange={(e) => {
+                setDiary(e.target.value);
+              }}
+              className={
+                "p-6 text-xl sm:text-2xl text-center w-[600px] min-h-[26px] focus:outline-none flex "
+              }
+              style={{ height: "auto" }}
+              onInput={(e) => {
+                e.target.style.height = "auto";
+                e.target.style.height = e.target.scrollHeight + "px";
+              }}
+            />
+          </div>
+          <div className="flex">
+            <Button
+              dark
+              text={"done"}
+              clickHandler={(e) => {
+                //setSubmittedDiary(diary);
+                handleSetJournal(diary);
+              }}
+            />
+          </div>
+        </div>
       </div>
       <Calendar completeData={data} handleSetMood={handleSetMood} />
     </div>

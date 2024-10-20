@@ -36,19 +36,12 @@ export default function RootLayout({ children }) {
       <div>
         <Logout />
       </div>
-      {/* <div
-        className={
-          "flex items-center justify-between text-base sm:text-lg textGradient "
-        }
-      >
-        <h1>Log out</h1>
-      </div> */}
     </header>
   );
   const footer = (
     <footer className="p-4 sm:p-8">
-      <p className={"text-indigo-500 text-center " + fugaz.className}>
-        Created with ❤️
+      <p className={"text-indigo-500 text-center "}>
+        Created using Next.js, Tailwind CSS
       </p>
     </footer>
   );
