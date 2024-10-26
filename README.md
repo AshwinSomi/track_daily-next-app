@@ -2,7 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Whats next
 
-add some AI models 
+add some AI models.
+
 I can do sentiment analysis on the mood and journl to get the sentiment and update UI based on the sentiment.
 
 or add a voice input that convert to texts (basic)
