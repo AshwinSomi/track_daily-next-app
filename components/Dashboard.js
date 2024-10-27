@@ -25,7 +25,7 @@ export default function Dashboard() {
     for (let year in data) {
       for (let month in data[year]) {
         for (let day in data[year][month]) {
-          let days_mood = data[year][month][day];
+          let days_mood = Number(data[year][month][day].mood);
           total_number_of_days += 1;
           sum_moods += days_mood;
         }
@@ -109,7 +109,8 @@ export default function Dashboard() {
       // if (newData[year][month][day].journal) {
       //   newData[year][month][day].journal += ".\n " + submittedDiary;
       // }
-      newData[year][month][day].journal = submittedDiary;
+      newData[year][month][day].journal =
+        newData[year][month][day].journal + "; :->" + submittedDiary;
       //update the current state
       setData(newData);
       //update the global state
