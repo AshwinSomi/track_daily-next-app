@@ -21,7 +21,7 @@ const fugaz = Fugaz_One({ subsets: ["latin"], weight: ["400"] });
 const opensans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Broodl",
+  title: "Track-Daily",
   description: "Track you daily mood every day of the year",
 };
 
@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
     <header className="p-4 sm:p-8 flex items-center justify-between gap-4 ">
       <Link href={"/"}>
         <h1 className={"text-base sm:text-lg textGradient " + fugaz.className}>
-          Broodl
+          Track-Daily
         </h1>
       </Link>
       <div>

@@ -68,6 +68,10 @@ export default function Calendar(props) {
   function handleClick(dayIndex) {
     setClick(true);
     setDayIdx(dayIndex);
+    const element = document.getElementById("journal");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
   }
 
   const monthNow = new Date(
@@ -140,6 +144,7 @@ export default function Calendar(props) {
                 : "white";
 
               return (
+                // <a href="#journal">
                 <div
                   style={{ background: color }}
                   className={
@@ -153,13 +158,14 @@ export default function Calendar(props) {
                 >
                   <p>{dayIndex}</p>
                 </div>
+                // </a>
               );
             })}
           </div>
         ))}
       </div>
-      <div>
-        {click && data[dayIdx] && (
+      <div id="journal">
+        {click && (
           <div
             className={
               "flex justify-center items-center bg-stone-200 rounded-lg p-6 md:p-8 lg:p-10 w-full "
@@ -172,7 +178,7 @@ export default function Calendar(props) {
               }
             >
               {" "}
-              {data[dayIdx].journal}
+              {data[dayIdx] ? data[dayIdx].journal : "No Record found"}
             </p>
           </div>
         )}

@@ -9,7 +9,7 @@ export default function Button(props) {
     <button
       onClick={clickHandler}
       className={
-        "rounded-full overflow-hidden duration-200 hover:opacity-60 border-2 border-solid border-indigo-600 " +
+        "rounded-full overflow-hidden duration-200 transform transition-all hover:scale-105 active:scale-100 hover:opacity-60 border-2 border-solid border-indigo-600 " +
         (dark ? "text-white bg-indigo-600 " : " text-indigo-600 ") +
         (full ? "grid place-items-center w-full " : " ")
       }

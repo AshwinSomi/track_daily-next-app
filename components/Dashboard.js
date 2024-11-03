@@ -56,12 +56,6 @@ export default function Dashboard() {
       }
 
       newData[year][month][day].mood = mood;
-      //add new notes to existing notes, need to fetch the data from firebase
-      // if (newData[year][month][day].journal) {
-      //   newData[year][month][day].journal += ".\n " + submittedDiary;
-      // }
-      //newData[year][month][day].journal = submittedDiary;
-      //update the current state
       setData(newData);
       //update the global state
       setUserDataObject(newData);
@@ -87,7 +81,7 @@ export default function Dashboard() {
     }
   }
 
-  async function handleSetJournal(submittedDiary) {
+  async function handleSetJournal(diary) {
     //const now = new Date();
     const day = now.getDate();
     const month = now.getMonth();
@@ -110,7 +104,7 @@ export default function Dashboard() {
       //   newData[year][month][day].journal += ".\n " + submittedDiary;
       // }
       newData[year][month][day].journal =
-        newData[year][month][day].journal + "; :->" + submittedDiary;
+        newData[year][month][day].journal + ".   ▸ " + diary;
       //update the current state
       setData(newData);
       //update the global state
@@ -124,7 +118,7 @@ export default function Dashboard() {
             [month]: {
               [day]: {
                 //mood: mood,
-                journal: submittedDiary,
+                journal: data[year][month][day].journal,
               },
             },
           },
@@ -197,6 +191,8 @@ export default function Dashboard() {
               const currentMoodValue = moodIndex + 1;
               setMood(currentMoodValue);
               handleSetMood(currentMoodValue);
+              const element = document.getElementById("calendar");
+              element.scrollIntoView({ behavior: "smooth" });
             }}
             className={
               "p-4 px-5 rounded-2xl purpleShadow duration-200 bg-indigo-50 hover:bg-indigo-100 text-center flex flex-col items-center gap-2 flex-1 "
@@ -214,45 +210,50 @@ export default function Dashboard() {
             </p>
           </button>
         ))}
-        <div className="flex flex-col items-center justify-between ">
+      </div>
+      {/* items-center justify-between */}
+      <div className="grid grid-col place-items-center justify-center ">
+        <div className=" ">
           <p
             className={
               "p-6 text-2xl sm:text-3xl md:text-4xl text-center " +
               fugaz.className
             }
           >
-            Want to say something...
+            Want to say something...?
           </p>
-          <div>
-            <textarea
-              value={diary}
-              placeholder="type here"
-              onChange={(e) => {
-                setDiary(e.target.value);
-              }}
-              className={
-                "p-6 text-xl sm:text-2xl text-center w-[600px] min-h-[26px] focus:outline-none flex "
-              }
-              style={{ height: "auto" }}
-              onInput={(e) => {
-                e.target.style.height = "auto";
-                e.target.style.height = e.target.scrollHeight + "px";
-              }}
-            />
-          </div>
-          <div className="flex">
-            <Button
-              dark
-              text={"done"}
-              clickHandler={(e) => {
-                //setSubmittedDiary(diary);
-                handleSetJournal(diary);
-              }}
-            />
-          </div>
+        </div>
+        <div className=" p-6 ">
+          <textarea
+            value={diary}
+            placeholder="type here"
+            onChange={(e) => {
+              setDiary(e.target.value);
+            }}
+            className={
+              " text-xl sm:text-2xl text-center max-w-[600px] mx-auto w-full min-h-[26px] focus:outline-none "
+            }
+            style={{ height: "auto" }}
+            onInput={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = e.target.scrollHeight + "px";
+            }}
+          />
+        </div>
+        <div className=" p-6 ">
+          <Button
+            dark
+            text={"done"}
+            clickHandler={(e) => {
+              //setSubmittedDiary(diary);
+              handleSetJournal(diary);
+            }}
+          />
         </div>
       </div>
-      <Calendar completeData={data} handleSetMood={handleSetMood} />
+      <div id="calendar">
+        <Calendar completeData={data} handleSetMood={handleSetMood} />
+      </div>
     </div>
   );
 }

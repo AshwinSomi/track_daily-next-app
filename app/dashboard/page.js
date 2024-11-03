@@ -5,7 +5,7 @@ import Login from "@/components/Login";
 import Main from "@/components/Main";
 
 export const metadata = {
-  title: "Broodl - Dashboard",
+  title: "Track-Daily - Dashboard",
 };
 
 const DashboardPage = () => {
